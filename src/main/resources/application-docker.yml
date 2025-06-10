@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/taskmanager_demo
+    username: ${POSTGRES_USER:taskmanager}
+    password: ${POSTGRES_PASSWORD:taskmanager}
+
+logging:
+  level:
+    com.demo.copilot.taskmanager: INFO
+    org.springframework.security: WARN
+  file:
+    name: /app/logs/task-manager.log
