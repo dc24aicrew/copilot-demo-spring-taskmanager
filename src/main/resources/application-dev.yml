@@ -1,0 +1,57 @@
+# Development profile with H2 in-memory database
+spring:
+  datasource:
+    url: jdbc:h2:mem:taskmanager_demo;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 20000
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+    open-in-view: false
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: false
+
+  flyway:
+    enabled: false # Disable Flyway for dev profile to avoid migration conflicts
+
+  security:
+    jwt:
+      secret: dev-secret-key-change-in-production-minimum-32-characters-long-for-development
+      expiration: 86400000 # 24 hours
+      refresh-expiration: 604800000 # 7 days
+
+logging:
+  level:
+    com.demo.copilot.taskmanager: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.web: DEBUG
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
