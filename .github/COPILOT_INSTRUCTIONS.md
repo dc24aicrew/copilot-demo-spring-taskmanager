@@ -10,6 +10,33 @@ This is a **Spring Boot Task Management System** designed specifically for **Git
 - **Enterprise-grade** Spring Boot application patterns
 - **Real-world scenarios** for architectural decision-making
 
+## 🔧 Context7 Integration
+
+### IMPORTANT: Always Use Context7 for Latest Documentation
+**Context7** provides up-to-date documentation for libraries and frameworks. Always consult Context7 before implementing features to ensure you're using the latest APIs and best practices.
+
+### How to Use Context7 in This Project
+1. **Before using any library**: Check Context7 for the latest documentation
+2. **When implementing new features**: Reference Context7 for current best practices
+3. **For dependency updates**: Verify compatibility and migration guides via Context7
+
+### Key Libraries to Check in Context7
+- **Spring Boot**: Always use latest stable version patterns and configurations
+- **Spring Security**: Current security best practices and JWT implementations
+- **Spring Data JPA**: Latest repository patterns and query methods
+- **Spring WebFlux**: Reactive programming patterns for analytics features
+- **Docker & Testcontainers**: Container best practices and testing strategies
+- **OpenAPI/Swagger**: Latest specification and annotation patterns
+
+### Context7 Usage Examples
+```java
+// Before implementing, check Context7 for:
+// - Latest Spring Boot 3.x configuration patterns
+// - Current Spring Security 6.x JWT implementation
+// - Modern Spring Data JPA query methods
+// - Reactive WebFlux patterns
+```
+
 ## 🏗️ Architecture Guidelines
 
 ### Clean Architecture Principles
@@ -59,6 +86,7 @@ Presentation Layer
 ## 💻 Coding Standards
 
 ### Java & Spring Boot Guidelines
+**Note**: Always verify the latest patterns via Context7 before implementation.
 
 #### Entity Design
 ```java
@@ -252,12 +280,13 @@ When implementing features for demo issues:
 ## 🚀 Development Workflow
 
 ### When Adding New Features
-1. **Start with domain entities** - pure business logic
-2. **Define repository contracts** in domain layer
-3. **Implement use cases** in application layer
-4. **Create infrastructure implementations**
-5. **Add presentation layer** (controllers, DTOs)
-6. **Write comprehensive tests** at all layers
+1. **Check Context7** for latest library documentation
+2. **Start with domain entities** - pure business logic
+3. **Define repository contracts** in domain layer
+4. **Implement use cases** in application layer
+5. **Create infrastructure implementations**
+6. **Add presentation layer** (controllers, DTOs)
+7. **Write comprehensive tests** at all layers
 
 ### Code Generation Preferences
 - **Use Builder pattern** for complex objects
@@ -334,6 +363,27 @@ Document significant architectural decisions in code comments:
  */
 ```
 
+## 🔄 Dependency Management
+
+### Version Strategy
+- **Always check Context7** for recommended versions
+- **Use Spring Boot's dependency management** for consistency
+- **Prefer stable releases** over alpha/beta versions
+- **Document version decisions** in pom.xml comments
+
+### Key Dependencies
+```xml
+<!-- Always verify latest stable versions via Context7 -->
+<parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>CHECK_CONTEXT7_FOR_LATEST</version>
+</parent>
+```
+
 ---
 
-**Remember**: This project demonstrates both correct and intentionally flawed implementations to showcase GitHub Copilot's architectural refactoring capabilities. Always consider the demo context when making implementation decisions.
+**Remember**: 
+1. This project demonstrates both correct and intentionally flawed implementations to showcase GitHub Copilot's architectural refactoring capabilities.
+2. Always consult Context7 for the latest library documentation and best practices before implementation.
+3. Consider the demo context when making implementation decisions.
