@@ -10,20 +10,79 @@ This repository demonstrates **Clean Architecture** principles with **Spring Boo
 
 ### Architecture Layers
 
+```mermaid
+graph TB
+    subgraph "🌐 Presentation Layer"
+        A[Controllers]
+        B[DTOs]
+        C[Exception Handlers]
+        D[Request/Response Mappers]
+    end
+    
+    subgraph "📋 Application Layer"
+        E[Use Cases]
+        F[Application Services]
+        G[Command/Query Objects]
+        H[Application DTOs]
+    end
+    
+    subgraph "💼 Domain Layer"
+        I[Domain Entities]
+        J[Value Objects]
+        K[Domain Services]
+        L[Repository Contracts]
+        M[Domain Exceptions]
+    end
+    
+    subgraph "🔧 Infrastructure Layer"
+        N[JPA Repositories]
+        O[Security Configuration]
+        P[External Services]
+        Q[Database Migrations]
+    end
+    
+    A --> E
+    B --> F
+    C --> F
+    D --> H
+    
+    E --> I
+    F --> J
+    G --> K
+    H --> L
+    
+    N --> L
+    O --> K
+    P --> K
+    Q --> I
+    
+    style I fill:#e1f5fe
+    style J fill:#e1f5fe
+    style K fill:#e1f5fe
+    style L fill:#e1f5fe
+    style M fill:#e1f5fe
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    Presentation Layer                       │
-│              (Controllers, DTOs, Mappers)                  │
-├─────────────────────────────────────────────────────────────┤
-│                    Application Layer                        │
-│             (Services, Use Cases, Exceptions)              │
-├─────────────────────────────────────────────────────────────┤
-│                     Domain Layer                           │
-│        (Entities, Value Objects, Business Logic)          │
-├─────────────────────────────────────────────────────────────┤
-│                  Infrastructure Layer                      │
-│       (Repositories, Security, External Services)         │
-└─────────────────────────────────────────────────────────────┘
+
+### Clean Architecture Dependency Flow
+
+```mermaid
+graph LR
+    subgraph "Dependency Direction"
+        A[🌐 Presentation] --> B[📋 Application]
+        B --> C[💼 Domain]
+        D[🔧 Infrastructure] --> C
+        
+        style C fill:#4caf50,color:#fff
+        style A fill:#2196f3,color:#fff
+        style B fill:#ff9800,color:#fff
+        style D fill:#9c27b0,color:#fff
+    end
+    
+    subgraph "Key Principle"
+        E["🎯 Domain Layer<br/>• No external dependencies<br/>• Pure business logic<br/>• Framework agnostic"]
+        
+        style E fill:#e8f5e8
+    end
 ```
 
 ### Domain-Driven Design (DDD) Patterns
