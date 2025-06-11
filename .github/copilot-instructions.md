@@ -2,78 +2,43 @@
 
 ## 🎯 Project Context
 
-This is a **Spring Boot Task Management System** designed specifically for **GitHub Copilot Coding Agent demonstration**. The project showcases Clean Architecture principles with Domain-Driven Design (DDD) patterns in an enterprise Java environment.
+This is a **Spring Boot Task Management System** designed specifically for **GitHub Copilot Coding Agent demonstration**. The project showcases Clean Architecture principles with Domain-Driven Design (DDD) patterns with **intentional architectural violations** for educational purposes.
 
 ### Primary Purpose
 - **Demo repository** for GitHub Copilot capabilities
-- **Educational showcase** of Clean Architecture implementation
+- **Educational showcase** of bad-to-good architectural transformation
 - **Enterprise-grade** Spring Boot application patterns
 - **Real-world scenarios** for architectural decision-making
 
 ## 🔧 Context7 Integration
 
-### IMPORTANT: Always Use Context7 for Latest Documentation
-**Context7** provides up-to-date documentation for libraries and frameworks. Always consult Context7 before implementing features to ensure you're using the latest APIs and best practices.
+**IMPORTANT**: Always use Context7 for latest library documentation before implementing features.
 
-### How to Use Context7 in This Project
-1. **Before using any library**: Check Context7 for the latest documentation
-2. **When implementing new features**: Reference Context7 for current best practices
-3. **For dependency updates**: Verify compatibility and migration guides via Context7
-
-### Key Libraries to Check in Context7
-- **Spring Boot**: Always use latest stable version patterns and configurations
-- **Spring Security**: Current security best practices and JWT implementations
-- **Spring Data JPA**: Latest repository patterns and query methods
-- **Spring WebFlux**: Reactive programming patterns for analytics features
-- **Docker & Testcontainers**: Container best practices and testing strategies
-- **OpenAPI/Swagger**: Latest specification and annotation patterns
-
-### Context7 Usage Examples
-```java
-// Before implementing, check Context7 for:
-// - Latest Spring Boot 3.x configuration patterns
-// - Current Spring Security 6.x JWT implementation
-// - Modern Spring Data JPA query methods
-// - Reactive WebFlux patterns
-```
+### Key Libraries to Check
+- Spring Boot 3.x patterns and configurations
+- Spring Security 6.x JWT implementations
+- Spring Data JPA repository patterns
+- Spring WebFlux reactive patterns
+- Docker & Testcontainers best practices
+- OpenAPI/Swagger specifications
 
 ## 🏗️ Architecture Guidelines
 
 ### Clean Architecture Principles
-**CRITICAL**: This project follows strict Clean Architecture principles with intentional violations for demo purposes.
+**CRITICAL**: This project has **intentional architectural violations** for demo purposes.
 
-#### Layer Structure (Correct Implementation)
+#### Target Layer Structure
 ```
-Domain Layer (Core)
-├── Pure business logic
-├── No external dependencies
-├── Framework-agnostic entities
-└── Repository contracts (interfaces only)
-
-Application Layer
-├── Use cases and orchestration
-├── Application services
-├── DTOs for data transfer
-└── Depends only on Domain
-
-Infrastructure Layer
-├── Database implementations
-├── External service integrations
-├── Framework-specific code
-└── Implements Domain contracts
-
-Presentation Layer
-├── REST controllers
-├── Request/response handling
-├── Input validation
-└── Depends on Application layer
+Domain Layer (Core) → Application Layer → Infrastructure Layer → Presentation Layer
 ```
 
-#### Current State (Intentionally Flawed for Demo)
+#### Current Intentional Violations (for demo)
 - Domain entities contain JPA annotations ❌
-- Repository interfaces in infrastructure layer ❌
+- Repository interfaces in infrastructure layer ❌ 
 - Mixed concerns across layers ❌
 - Use cases not properly implemented ❌
+
+**Demo Purpose**: Show GitHub Copilot's ability to refactor toward proper Clean Architecture.
 
 ### Domain-Driven Design Patterns
 - **Entities**: Rich domain objects with business logic
@@ -81,7 +46,7 @@ Presentation Layer
 - **Aggregates**: Consistency boundaries
 - **Repository Contracts**: Abstract data access in domain
 - **Domain Services**: Complex business logic
-- **Domain Events**: For decoupled communication
+- **Domain Events**: Decoupled communication
 
 ## 💻 Coding Standards
 
@@ -115,138 +80,28 @@ public class Task {
 ```
 
 #### Service Layer Patterns
-```java
-// Application Service (orchestration only)
-@Service
-@Transactional
-public class TaskApplicationService {
-    public TaskResponse createTask(CreateTaskCommand command) {
-        // Orchestrate use case
-        Task task = createTaskUseCase.execute(command);
-        return taskMapper.toResponse(task);
-    }
-}
+- **Application Services**: Orchestration only (`@Service`, `@Transactional`)
+- **Domain Services**: Business logic without framework dependencies
+- **Repository Pattern**: Domain contracts in domain layer, JPA implementations in infrastructure
 
-// Domain Service (business logic)
-public class TaskDomainService {
-    public boolean canAssignTask(Task task, User user) {
-        // Complex business rules here
-        return user.hasRole(UserRole.MANAGER) || 
-               task.getProject().hasTeamMember(user);
-    }
-}
-```
-
-#### Repository Pattern
-```java
-// Domain repository contract (in domain layer)
-public interface TaskRepository {
-    Task save(Task task);
-    Optional<Task> findById(TaskId id);
-    List<Task> findByAssignee(UserId userId);
-}
-
-// Infrastructure implementation
-@Repository
-public class JpaTaskRepository implements TaskRepository {
-    @Autowired private TaskJpaRepository jpaRepository;
-    
-    @Override
-    public Task save(Task task) {
-        TaskJpaEntity entity = mapper.toEntity(task);
-        return mapper.toDomain(jpaRepository.save(entity));
-    }
-}
-```
-
-### API Design Standards
-
-#### REST Controller Pattern
-```java
-@RestController
-@RequestMapping("/api/tasks")
-@SecurityRequirement(name = "bearerAuth")
-public class TaskController {
-    
-    @PostMapping
-    @Operation(summary = "Create new task")
-    public ResponseEntity<TaskResponse> createTask(
-            @Valid @RequestBody CreateTaskRequest request,
-            Authentication authentication) {
-        
-        CreateTaskCommand command = mapper.toCommand(request, authentication);
-        TaskResponse response = taskService.createTask(command);
-        return ResponseEntity.status(201).body(response);
-    }
-}
-```
+#### API Design Standards
+- Use `@RestController` with `@SecurityRequirement` for OpenAPI
+- Return `ResponseEntity<T>` with proper HTTP status codes
+- Use `@Valid` for request validation
+- Apply `@JsonFormat` for date serialization
 
 #### DTO Design
-```java
-// Request DTO with validation
-public class CreateTaskRequest {
-    @NotBlank(message = "Title is required")
-    @Size(max = 200, message = "Title cannot exceed 200 characters")
-    private String title;
-    
-    @Valid
-    private TaskPriority priority = TaskPriority.MEDIUM;
-}
-
-// Response DTO with proper serialization
-public class TaskResponse {
-    private UUID id;
-    private String title;
-    
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime dueDate;
-}
-```
+- Request DTOs with Bean Validation (`@NotBlank`, `@Size`, etc.)
+- Response DTOs with proper serialization annotations
+- Use Builder pattern for complex objects
 
 ## 🧪 Testing Guidelines
 
 ### Test Architecture
-```java
-// Domain unit test (no Spring context)
-class TaskTest {
-    @Test
-    void shouldCompleteTask() {
-        Task task = Task.builder()
-            .title("Test Task")
-            .status(TaskStatus.IN_PROGRESS)
-            .build();
-            
-        task.complete();
-        
-        assertThat(task.getStatus()).isEqualTo(TaskStatus.COMPLETED);
-        assertThat(task.getCompletedAt()).isNotNull();
-    }
-}
-
-// Integration test with TestContainers
-@SpringBootTest
-@Testcontainers
-class TaskRepositoryIntegrationTest {
-    @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15")
-            .withDatabaseName("testdb")
-            .withUsername("test")
-            .withPassword("test");
-}
-
-// Controller test with security
-@WebMvcTest(TaskController.class)
-@WithMockUser(roles = "USER")
-class TaskControllerTest {
-    @Test
-    void shouldCreateTask() throws Exception {
-        mockMvc.perform(post("/api/tasks")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(taskJson))
-                .andExpect(status().isCreated());
-    }
-}
-```
+- **Domain unit tests**: No Spring context, pure business logic testing
+- **Integration tests**: Use TestContainers with PostgreSQL 15+
+- **Controller tests**: `@WebMvcTest` with `@WithMockUser` for security testing
+- **AssertJ**: Preferred assertion library for fluent assertions
 
 ## 🎯 Demo-Specific Considerations
 
@@ -259,23 +114,16 @@ When implementing features for demo issues:
 4. **Issue #4 (Clean Architecture)**: Fix architectural violations systematically
 
 ### Code Quality Standards
-- **Comprehensive JavaDoc** for public APIs
 - **Builder pattern** for complex object creation
-- **Immutable value objects** where possible
-- **Defensive programming** with null checks and validation
+- **Comprehensive JavaDoc** for public APIs
 - **Meaningful method names** that express business intent
+- **Defensive programming** with validation
 
-### Performance Considerations
-- **Lazy loading** strategies for JPA entities
+### Implementation Guidelines
+- **Method-level security** with `@PreAuthorize`
 - **Caching** with `@Cacheable` annotations
 - **Pagination** for list endpoints
-- **Database indexing** for query optimization
-
-### Security Implementation
-- **Method-level security** with `@PreAuthorize`
-- **Input validation** on all public methods
-- **SQL injection prevention** with parameterized queries
-- **XSS protection** with proper encoding
+- **Extensive logging** for demo visibility
 
 ## 🚀 Development Workflow
 
@@ -294,39 +142,6 @@ When implementing features for demo issues:
 - **Add comprehensive validation** with custom validators
 - **Generate OpenAPI documentation** with detailed examples
 - **Create meaningful test data** with realistic scenarios
-
-### Error Handling
-```java
-// Domain exceptions
-public class TaskDomainException extends RuntimeException {
-    public TaskDomainException(String message) {
-        super(message);
-    }
-}
-
-// Application exceptions
-public class TaskNotFoundException extends RuntimeException {
-    private final TaskId taskId;
-    
-    public TaskNotFoundException(TaskId taskId) {
-        super("Task not found: " + taskId);
-        this.taskId = taskId;
-    }
-}
-
-// Global exception handler
-@RestControllerAdvice
-public class GlobalExceptionHandler {
-    @ExceptionHandler(TaskNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleTaskNotFound(TaskNotFoundException ex) {
-        return ResponseEntity.status(404)
-            .body(ErrorResponse.builder()
-                .message(ex.getMessage())
-                .timestamp(LocalDateTime.now())
-                .build());
-    }
-}
-```
 
 ## 📚 Documentation Standards
 
