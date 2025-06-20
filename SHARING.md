@@ -102,10 +102,11 @@ flowchart LR
   style G fill:#e8f5e8
 ```
   
-
 > - https://docs.github.com/en/copilot/using-github-copilot/coding-agent
 
-### 2. Live Demo: How Coding Agent Works in Real-World Scenarios (25 minutes)
+---
+
+## 2. Live Demo: How Coding Agent Works in Real-World Scenarios
 
 #### Demo Environment Setup
 - **Project Context:** Spring Boot Task Management System
@@ -114,24 +115,26 @@ flowchart LR
 
 #### Demo Scenarios
 
-**Scenario A: Feature Implementation (10 minutes)**
+**Scenario A: Feature Implementation**
 - Implementing a new task analytics feature
 - Showcasing multi-file coordination
 - Demonstrating architectural decision-making
 
-**Scenario B: Architectural Refactoring (8 minutes)**
+**Scenario B: Architectural Refactoring**
 - Fixing Clean Architecture violations
 - Moving from infrastructure-contaminated domain to pure domain model
 - Repository pattern implementation
 
-**Scenario C: Bug Fixing and Testing (7 minutes)**
+**Scenario C: Bug Fixing and Testing**
 - Identifying and fixing security vulnerabilities
 - Generating comprehensive test suites
 - Integration test implementation with TestContainers
 
-### 3. Discussion: Benefits, Limitations, and Workflow Optimization (15 minutes)
+---
 
-#### Benefits
+## 3. Discussion: Benefits, Limitations, and Workflow Optimization
+
+### Benefits
 
 - Frees up time for more complex work
 - Handles "nice to have" backlog items
@@ -139,7 +142,7 @@ flowchart LR
 - Performs code refactoring and adds logging
 - Allows you to tackle tasks you might not have resources for otherwise
 
-#### Limitations
+### Limitations
 
 - Works within single repository only
 - Opens exactly one pull request per task
@@ -149,7 +152,7 @@ flowchart LR
 - Doesn't work with self-hosted GitHub Actions runners
 - Doesn't account for content exclusions
 
-#### Workflow Optimization Strategies
+### Workflow Optimization Strategies
 
 1. **Create clear issues** - Write like AI prompts with specific descriptions, acceptance criteria, and guidance on files that need changes
 2. **Choose the right type of tasks**
