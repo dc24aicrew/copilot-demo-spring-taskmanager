@@ -2,6 +2,7 @@ package com.demo.copilot.taskmanager.presentation.exception;
 
 import com.demo.copilot.taskmanager.application.exception.DuplicateEmailException;
 import com.demo.copilot.taskmanager.application.exception.DuplicateUsernameException;
+import com.demo.copilot.taskmanager.application.exception.TaskNotFoundException;
 import com.demo.copilot.taskmanager.application.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,17 @@ public class GlobalExceptionHandler {
         ErrorResponse error = ErrorResponse.builder()
                 .status(HttpStatus.NOT_FOUND.value())
                 .error("User Not Found")
+                .message(ex.getMessage())
+                .path(request.getDescription(false).replace("uri=", ""))
+                .build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(TaskNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleTaskNotFoundException(TaskNotFoundException ex, WebRequest request) {
+        ErrorResponse error = ErrorResponse.builder()
+                .status(HttpStatus.NOT_FOUND.value())
+                .error("Task Not Found")
                 .message(ex.getMessage())
                 .path(request.getDescription(false).replace("uri=", ""))
                 .build();
