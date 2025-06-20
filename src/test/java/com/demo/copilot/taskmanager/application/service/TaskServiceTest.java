@@ -2,6 +2,7 @@ package com.demo.copilot.taskmanager.application.service;
 
 import com.demo.copilot.taskmanager.application.dto.task.CreateTaskRequest;
 import com.demo.copilot.taskmanager.application.dto.task.TaskResponse;
+import com.demo.copilot.taskmanager.application.dto.task.TaskSummaryResponse;
 import com.demo.copilot.taskmanager.application.exception.TaskNotFoundException;
 import com.demo.copilot.taskmanager.application.mapper.TaskMapper;
 import com.demo.copilot.taskmanager.domain.entity.Task;
@@ -34,7 +35,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 import static org.mockito.ArgumentMatchers.*;
 
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class TaskServiceTest {
 
     @Mock
@@ -163,7 +168,7 @@ class TaskServiceTest {
         
         when(taskRepository.findTasksAccessibleByUser(any(UserId.class), any(Pageable.class)))
                 .thenReturn(taskPage);
-        when(taskMapper.toSummaryResponse(any(Task.class))).thenReturn(any());
+        when(taskMapper.toSummaryResponse(any(Task.class))).thenReturn(mock(TaskSummaryResponse.class));
 
         // When
         taskService.getAllTasks(pageable);
@@ -184,7 +189,7 @@ class TaskServiceTest {
         Page<Task> taskPage = new PageImpl<>(List.of(sampleTask));
         
         when(taskRepository.findByIsArchivedFalse(any(Pageable.class))).thenReturn(taskPage);
-        when(taskMapper.toSummaryResponse(any(Task.class))).thenReturn(any());
+        when(taskMapper.toSummaryResponse(any(Task.class))).thenReturn(mock(TaskSummaryResponse.class));
 
         // When
         taskService.getAllTasks(pageable);

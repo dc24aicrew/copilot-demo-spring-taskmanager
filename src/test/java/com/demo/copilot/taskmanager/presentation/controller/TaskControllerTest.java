@@ -4,9 +4,12 @@ import com.demo.copilot.taskmanager.application.dto.task.CreateTaskRequest;
 import com.demo.copilot.taskmanager.application.dto.task.TaskResponse;
 import com.demo.copilot.taskmanager.application.dto.task.TaskSummaryResponse;
 import com.demo.copilot.taskmanager.application.service.TaskService;
+import com.demo.copilot.taskmanager.application.mapper.TaskMapper;
 import com.demo.copilot.taskmanager.domain.valueobject.TaskCategory;
 import com.demo.copilot.taskmanager.domain.valueobject.TaskPriority;
 import com.demo.copilot.taskmanager.domain.valueobject.TaskStatus;
+import com.demo.copilot.taskmanager.infrastructure.repository.TaskRepository;
+import com.demo.copilot.taskmanager.infrastructure.security.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +42,20 @@ class TaskControllerTest {
     @MockBean
     private TaskService taskService;
 
+    @MockBean
+    private JwtService jwtService;
+
+    @MockBean 
+    private TaskRepository taskRepository;
+    
+    @MockBean
+    private TaskMapper taskMapper;
+
     @Autowired
     private ObjectMapper objectMapper;
 
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockUser(username = "550e8400-e29b-41d4-a716-446655440000", roles = "USER")
     void createTask_ShouldReturnCreatedTask() throws Exception {
         // Given
         CreateTaskRequest request = new CreateTaskRequest();
@@ -78,7 +90,7 @@ class TaskControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockUser(username = "550e8400-e29b-41d4-a716-446655440000", roles = "USER")
     void createTask_WithInvalidData_ShouldReturnBadRequest() throws Exception {
         // Given
         CreateTaskRequest request = new CreateTaskRequest();
@@ -93,7 +105,7 @@ class TaskControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockUser(username = "550e8400-e29b-41d4-a716-446655440000", roles = "USER")
     void getTaskById_ShouldReturnTask() throws Exception {
         // Given
         UUID taskId = UUID.randomUUID();
@@ -115,7 +127,7 @@ class TaskControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockUser(username = "550e8400-e29b-41d4-a716-446655440000", roles = "USER")
     void getAllTasks_ShouldReturnPageOfTasks() throws Exception {
         // Given
         TaskSummaryResponse task1 = new TaskSummaryResponse();
@@ -146,7 +158,7 @@ class TaskControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockUser(username = "550e8400-e29b-41d4-a716-446655440000", roles = "USER")
     void deleteTask_ShouldReturnNoContent() throws Exception {
         // Given
         UUID taskId = UUID.randomUUID();
@@ -175,7 +187,7 @@ class TaskControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockUser(username = "550e8400-e29b-41d4-a716-446655440000", roles = "USER")
     void getMyAssignedTasks_ShouldReturnAssignedTasks() throws Exception {
         // Given
         TaskSummaryResponse task = new TaskSummaryResponse();
@@ -196,7 +208,7 @@ class TaskControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockUser(username = "550e8400-e29b-41d4-a716-446655440000", roles = "USER")
     void getMyCreatedTasks_ShouldReturnCreatedTasks() throws Exception {
         // Given
         TaskSummaryResponse task = new TaskSummaryResponse();
