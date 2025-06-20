@@ -8,7 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 /**
@@ -52,18 +52,18 @@ public class User {
     private Boolean isActive;
 
     @Column(name = "last_login_at")
-    private LocalDateTime lastLoginAt;
+    private OffsetDateTime lastLoginAt;
 
     @Column(name = "avatar_url")
     private String avatarUrl;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
+    private OffsetDateTime updatedAt;
 
     @Version
     @Column(name = "version")
@@ -94,7 +94,7 @@ public class User {
     }
 
     public void updateLastLogin() {
-        this.lastLoginAt = LocalDateTime.now();
+        this.lastLoginAt = OffsetDateTime.now();
     }
 
     public void changePassword(String newPasswordHash) {
@@ -135,10 +135,10 @@ public class User {
     public String getLastName() { return lastName; }
     public UserRole getRole() { return role; }
     public Boolean getIsActive() { return isActive; }
-    public LocalDateTime getLastLoginAt() { return lastLoginAt; }
+    public OffsetDateTime getLastLoginAt() { return lastLoginAt; }
     public String getAvatarUrl() { return avatarUrl; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public OffsetDateTime getCreatedAt() { return createdAt; }
+    public OffsetDateTime getUpdatedAt() { return updatedAt; }
     public Long getVersion() { return version; }
 
     @Override

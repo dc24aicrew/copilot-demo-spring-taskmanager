@@ -1,6 +1,6 @@
 package com.demo.copilot.taskmanager.infrastructure.repository;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,14 +62,14 @@ public interface UserRepository extends JpaRepository<User, UserId> {
      * Find users who have not logged in since a specific date.
      */
     @Query("SELECT u FROM User u WHERE u.lastLoginAt < :date OR u.lastLoginAt IS NULL")
-    List<User> findUsersNotLoggedInSince(@Param("date") LocalDateTime date);
+    List<User> findUsersNotLoggedInSince(@Param("date") OffsetDateTime date);
 
     /**
      * Find users created between two dates.
      */
     @Query("SELECT u FROM User u WHERE u.createdAt BETWEEN :startDate AND :endDate")
-    List<User> findUsersCreatedBetween(@Param("startDate") LocalDateTime startDate, 
-                                      @Param("endDate") LocalDateTime endDate);
+    List<User> findUsersCreatedBetween(@Param("startDate") OffsetDateTime startDate, 
+                                      @Param("endDate") OffsetDateTime endDate);
 
     /**
      * Count active users.

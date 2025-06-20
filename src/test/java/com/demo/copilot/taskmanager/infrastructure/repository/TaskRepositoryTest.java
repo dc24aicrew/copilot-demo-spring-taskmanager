@@ -11,7 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +44,7 @@ class TaskRepositoryTest {
                 .category(TaskCategory.DEVELOPMENT)
                 .createdBy(userId1)
                 .assignedTo(userId1)
-                .dueDate(LocalDateTime.now().plusDays(7))
+                .dueDate(OffsetDateTime.now().plusDays(7))
                 .isArchived(false)
                 .build();
 
@@ -57,7 +57,7 @@ class TaskRepositoryTest {
                 .category(TaskCategory.TESTING)
                 .createdBy(userId2)
                 .assignedTo(userId1)
-                .dueDate(LocalDateTime.now().plusDays(3))
+                .dueDate(OffsetDateTime.now().plusDays(3))
                 .isArchived(false)
                 .build();
 
@@ -70,7 +70,7 @@ class TaskRepositoryTest {
                 .category(TaskCategory.DOCUMENTATION)
                 .createdBy(userId1)
                 .assignedTo(userId2)
-                .dueDate(LocalDateTime.now().minusDays(1))
+                .dueDate(OffsetDateTime.now().minusDays(1))
                 .isArchived(false)
                 .build();
 

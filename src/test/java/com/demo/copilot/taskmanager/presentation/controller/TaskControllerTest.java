@@ -18,7 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,7 +51,7 @@ class TaskControllerTest {
         request.setDescription("Test Description");
         request.setPriority(TaskPriority.HIGH);
         request.setCategory(TaskCategory.DEVELOPMENT);
-        request.setDueDate(LocalDateTime.now().plusDays(7));
+        request.setDueDate(OffsetDateTime.now().plusDays(7));
 
         TaskResponse response = new TaskResponse();
         response.setId(UUID.randomUUID());

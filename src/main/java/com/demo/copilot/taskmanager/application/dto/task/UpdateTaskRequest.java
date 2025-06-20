@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 /**
@@ -35,9 +35,9 @@ public class UpdateTaskRequest {
     @Schema(description = "Task category", example = "DEVELOPMENT")
     private TaskCategory category;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    @Schema(description = "Task due date", example = "2025-07-01T10:00:00")
-    private LocalDateTime dueDate;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    @Schema(description = "Task due date", example = "2025-07-01T10:00:00+00:00")
+    private OffsetDateTime dueDate;
 
     @Schema(description = "User ID to assign the task to", example = "550e8400-e29b-41d4-a716-446655440000")
     private UUID assignedTo;
@@ -96,11 +96,11 @@ public class UpdateTaskRequest {
         this.category = category;
     }
 
-    public LocalDateTime getDueDate() {
+    public OffsetDateTime getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDateTime dueDate) {
+    public void setDueDate(OffsetDateTime dueDate) {
         this.dueDate = dueDate;
     }
 

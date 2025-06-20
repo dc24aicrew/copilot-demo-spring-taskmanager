@@ -6,7 +6,7 @@ import com.demo.copilot.taskmanager.domain.valueobject.TaskStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 /**
@@ -30,9 +30,9 @@ public class TaskSummaryResponse {
     @Schema(description = "Task category", example = "DEVELOPMENT")
     private TaskCategory category;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    @Schema(description = "Task due date", example = "2025-07-01T10:00:00")
-    private LocalDateTime dueDate;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    @Schema(description = "Task due date", example = "2025-07-01T10:00:00+00:00")
+    private OffsetDateTime dueDate;
 
     @Schema(description = "User ID assigned to the task", example = "550e8400-e29b-41d4-a716-446655440000")
     private UUID assignedTo;
@@ -40,21 +40,21 @@ public class TaskSummaryResponse {
     @Schema(description = "User ID who created the task", example = "550e8400-e29b-41d4-a716-446655440000")
     private UUID createdBy;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    @Schema(description = "Task creation date", example = "2025-06-20T09:00:00")
-    private LocalDateTime createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    @Schema(description = "Task creation date", example = "2025-06-20T09:00:00+00:00")
+    private OffsetDateTime createdAt;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    @Schema(description = "Task last update date", example = "2025-06-25T14:20:00")
-    private LocalDateTime updatedAt;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    @Schema(description = "Task last update date", example = "2025-06-25T14:20:00+00:00")
+    private OffsetDateTime updatedAt;
 
     // Default constructor
     public TaskSummaryResponse() {}
 
     // Constructor
     public TaskSummaryResponse(UUID id, String title, TaskStatus status, TaskPriority priority,
-                              TaskCategory category, LocalDateTime dueDate, UUID assignedTo,
-                              UUID createdBy, LocalDateTime createdAt, LocalDateTime updatedAt) {
+                              TaskCategory category, OffsetDateTime dueDate, UUID assignedTo,
+                              UUID createdBy, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
         this.id = id;
         this.title = title;
         this.status = status;
@@ -108,11 +108,11 @@ public class TaskSummaryResponse {
         this.category = category;
     }
 
-    public LocalDateTime getDueDate() {
+    public OffsetDateTime getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDateTime dueDate) {
+    public void setDueDate(OffsetDateTime dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -132,19 +132,19 @@ public class TaskSummaryResponse {
         this.createdBy = createdBy;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public OffsetDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(OffsetDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public OffsetDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(OffsetDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 }

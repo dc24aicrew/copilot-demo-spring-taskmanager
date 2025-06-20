@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -139,11 +139,11 @@ public class GlobalExceptionHandler {
         private String error;
         private String message;
         private String path;
-        private LocalDateTime timestamp;
+        private OffsetDateTime timestamp;
         private Map<String, String> validationErrors;
 
         public ErrorResponse() {
-            this.timestamp = LocalDateTime.now();
+            this.timestamp = OffsetDateTime.now();
         }
 
         public ErrorResponse(int status, String error, String message, String path) {
@@ -151,7 +151,7 @@ public class GlobalExceptionHandler {
             this.error = error;
             this.message = message;
             this.path = path;
-            this.timestamp = LocalDateTime.now();
+            this.timestamp = OffsetDateTime.now();
         }
 
         public static Builder builder() {
@@ -206,8 +206,8 @@ public class GlobalExceptionHandler {
         public void setMessage(String message) { this.message = message; }
         public String getPath() { return path; }
         public void setPath(String path) { this.path = path; }
-        public LocalDateTime getTimestamp() { return timestamp; }
-        public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
+        public OffsetDateTime getTimestamp() { return timestamp; }
+        public void setTimestamp(OffsetDateTime timestamp) { this.timestamp = timestamp; }
         public Map<String, String> getValidationErrors() { return validationErrors; }
         public void setValidationErrors(Map<String, String> validationErrors) { this.validationErrors = validationErrors; }
     }

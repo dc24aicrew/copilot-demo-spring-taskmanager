@@ -3,7 +3,7 @@ package com.demo.copilot.taskmanager.application.dto.user;
 import com.demo.copilot.taskmanager.domain.valueobject.UserRole;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 /**
@@ -21,14 +21,14 @@ public class UserResponse {
     private Boolean isActive;
     private String avatarUrl;
     
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime lastLoginAt;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    private OffsetDateTime lastLoginAt;
     
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    private OffsetDateTime createdAt;
     
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime updatedAt;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    private OffsetDateTime updatedAt;
 
     // Default constructor
     public UserResponse() {}
@@ -36,7 +36,7 @@ public class UserResponse {
     // Constructor
     public UserResponse(UUID id, String username, String email, String firstName, 
                        String lastName, UserRole role, Boolean isActive, String avatarUrl,
-                       LocalDateTime lastLoginAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
+                       OffsetDateTime lastLoginAt, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -124,27 +124,27 @@ public class UserResponse {
         this.avatarUrl = avatarUrl;
     }
 
-    public LocalDateTime getLastLoginAt() {
+    public OffsetDateTime getLastLoginAt() {
         return lastLoginAt;
     }
 
-    public void setLastLoginAt(LocalDateTime lastLoginAt) {
+    public void setLastLoginAt(OffsetDateTime lastLoginAt) {
         this.lastLoginAt = lastLoginAt;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public OffsetDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(OffsetDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public OffsetDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(OffsetDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 }

@@ -23,7 +23,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -80,7 +80,7 @@ class TaskServiceTest {
                 .category(TaskCategory.DEVELOPMENT)
                 .createdBy(currentUserId)
                 .assignedTo(currentUserId) // Task requires assignedTo to be non-null
-                .dueDate(LocalDateTime.now().plusDays(7))
+                .dueDate(OffsetDateTime.now().plusDays(7))
                 .isArchived(false)
                 .build();
 
@@ -100,7 +100,7 @@ class TaskServiceTest {
         createTaskRequest.setDescription("New Description");
         createTaskRequest.setPriority(TaskPriority.MEDIUM);
         createTaskRequest.setCategory(TaskCategory.WORK);
-        createTaskRequest.setDueDate(LocalDateTime.now().plusDays(5));
+        createTaskRequest.setDueDate(OffsetDateTime.now().plusDays(5));
     }
 
     @Test

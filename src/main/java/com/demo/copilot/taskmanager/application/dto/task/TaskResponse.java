@@ -6,7 +6,7 @@ import com.demo.copilot.taskmanager.domain.valueobject.TaskStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 /**
@@ -33,9 +33,9 @@ public class TaskResponse {
     @Schema(description = "Task category", example = "DEVELOPMENT")
     private TaskCategory category;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    @Schema(description = "Task due date", example = "2025-07-01T10:00:00")
-    private LocalDateTime dueDate;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    @Schema(description = "Task due date", example = "2025-07-01T10:00:00+00:00")
+    private OffsetDateTime dueDate;
 
     @Schema(description = "User ID assigned to the task", example = "550e8400-e29b-41d4-a716-446655440000")
     private UUID assignedTo;
@@ -52,17 +52,17 @@ public class TaskResponse {
     @Schema(description = "Whether the task is archived", example = "false")
     private Boolean isArchived;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    @Schema(description = "Task completion date", example = "2025-06-30T15:30:00")
-    private LocalDateTime completedAt;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    @Schema(description = "Task completion date", example = "2025-06-30T15:30:00+00:00")
+    private OffsetDateTime completedAt;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    @Schema(description = "Task creation date", example = "2025-06-20T09:00:00")
-    private LocalDateTime createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    @Schema(description = "Task creation date", example = "2025-06-20T09:00:00+00:00")
+    private OffsetDateTime createdAt;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    @Schema(description = "Task last update date", example = "2025-06-25T14:20:00")
-    private LocalDateTime updatedAt;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    @Schema(description = "Task last update date", example = "2025-06-25T14:20:00+00:00")
+    private OffsetDateTime updatedAt;
 
     @Schema(description = "Task version for optimistic locking", example = "1")
     private Long version;
@@ -72,10 +72,10 @@ public class TaskResponse {
 
     // Constructor
     public TaskResponse(UUID id, String title, String description, TaskStatus status,
-                       TaskPriority priority, TaskCategory category, LocalDateTime dueDate,
+                       TaskPriority priority, TaskCategory category, OffsetDateTime dueDate,
                        UUID assignedTo, UUID createdBy, Integer estimatedHours, Integer actualHours,
-                       Boolean isArchived, LocalDateTime completedAt, LocalDateTime createdAt,
-                       LocalDateTime updatedAt, Long version) {
+                       Boolean isArchived, OffsetDateTime completedAt, OffsetDateTime createdAt,
+                       OffsetDateTime updatedAt, Long version) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -143,11 +143,11 @@ public class TaskResponse {
         this.category = category;
     }
 
-    public LocalDateTime getDueDate() {
+    public OffsetDateTime getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDateTime dueDate) {
+    public void setDueDate(OffsetDateTime dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -191,27 +191,27 @@ public class TaskResponse {
         this.isArchived = isArchived;
     }
 
-    public LocalDateTime getCompletedAt() {
+    public OffsetDateTime getCompletedAt() {
         return completedAt;
     }
 
-    public void setCompletedAt(LocalDateTime completedAt) {
+    public void setCompletedAt(OffsetDateTime completedAt) {
         this.completedAt = completedAt;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public OffsetDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(OffsetDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public OffsetDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(OffsetDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
