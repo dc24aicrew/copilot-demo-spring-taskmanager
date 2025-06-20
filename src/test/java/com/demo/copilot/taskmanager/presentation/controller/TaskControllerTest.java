@@ -8,7 +8,7 @@ import com.demo.copilot.taskmanager.application.mapper.TaskMapper;
 import com.demo.copilot.taskmanager.domain.valueobject.TaskCategory;
 import com.demo.copilot.taskmanager.domain.valueobject.TaskPriority;
 import com.demo.copilot.taskmanager.domain.valueobject.TaskStatus;
-import com.demo.copilot.taskmanager.infrastructure.repository.TaskRepository;
+import com.demo.copilot.taskmanager.domain.repository.TaskRepositoryContract;
 import com.demo.copilot.taskmanager.infrastructure.security.JwtService;
 import com.demo.copilot.taskmanager.test.util.TestPage;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,7 +46,7 @@ class TaskControllerTest {
     private JwtService jwtService;
 
     @MockBean 
-    private TaskRepository taskRepository;
+    private TaskRepositoryContract taskRepository;
     
     @MockBean
     private TaskMapper taskMapper;

@@ -7,7 +7,7 @@ import com.demo.copilot.taskmanager.application.exception.TaskNotFoundException;
 import com.demo.copilot.taskmanager.application.mapper.TaskMapper;
 import com.demo.copilot.taskmanager.domain.entity.Task;
 import com.demo.copilot.taskmanager.domain.valueobject.*;
-import com.demo.copilot.taskmanager.infrastructure.repository.TaskRepository;
+import com.demo.copilot.taskmanager.domain.repository.TaskRepositoryContract;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,7 +43,7 @@ import org.mockito.quality.Strictness;
 class TaskServiceTest {
 
     @Mock
-    private TaskRepository taskRepository;
+    private TaskRepositoryContract taskRepository;
 
     @Mock
     private TaskMapper taskMapper;

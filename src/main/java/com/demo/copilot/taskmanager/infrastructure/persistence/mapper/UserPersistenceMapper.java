@@ -47,7 +47,7 @@ public class UserPersistenceMapper {
             return null;
         }
 
-        return new User.Builder()
+        User user = new User.Builder()
                 .id(jpaEntity.getId())
                 .username(jpaEntity.getUsername())
                 .email(jpaEntity.getEmail())
@@ -58,5 +58,26 @@ public class UserPersistenceMapper {
                 .isActive(jpaEntity.getIsActive())
                 .avatarUrl(jpaEntity.getAvatarUrl())
                 .build();
+
+        // Set persistence fields using reflection
+        setFieldValue(user, "lastLoginAt", jpaEntity.getLastLoginAt());
+        setFieldValue(user, "createdAt", jpaEntity.getCreatedAt());
+        setFieldValue(user, "updatedAt", jpaEntity.getUpdatedAt());
+        setFieldValue(user, "version", jpaEntity.getVersion());
+        
+        return user;
+    }
+
+    /**
+     * Helper method to set fields in domain entity using reflection.
+     */
+    private void setFieldValue(Object target, String fieldName, Object value) {
+        try {
+            var field = target.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(target, value);
+        } catch (Exception e) {
+            // Ignore - field might not exist or be accessible
+        }
     }
 }

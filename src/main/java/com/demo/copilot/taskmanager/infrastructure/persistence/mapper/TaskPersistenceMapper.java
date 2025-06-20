@@ -64,21 +64,27 @@ public class TaskPersistenceMapper {
                 .isArchived(jpaEntity.getIsArchived())
                 .build();
 
-        // Set the persistence-specific fields that don't go through builder
-        setDomainFields(task, jpaEntity);
+        // Set persistence fields using reflection for now
+        // In a real application, you'd have a more sophisticated approach
+        setFieldValue(task, "completedAt", jpaEntity.getCompletedAt());
+        setFieldValue(task, "actualHours", jpaEntity.getActualHours());
+        setFieldValue(task, "createdAt", jpaEntity.getCreatedAt());
+        setFieldValue(task, "updatedAt", jpaEntity.getUpdatedAt());
+        setFieldValue(task, "version", jpaEntity.getVersion());
         
         return task;
     }
 
     /**
-     * Helper method to set fields in domain entity that are not set through builder.
+     * Helper method to set fields in domain entity using reflection.
      */
-    private void setDomainFields(Task domainTask, TaskJpaEntity jpaEntity) {
-        // These would typically be set by reflection or by making the domain entity
-        // more flexible. For now, we'll assume the domain entity has package-private setters
-        // or we'll handle this through a factory method in the domain entity.
-        
-        // Note: In a real implementation, you might have a different approach
-        // such as using reflection or having special factory methods
+    private void setFieldValue(Object target, String fieldName, Object value) {
+        try {
+            var field = target.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(target, value);
+        } catch (Exception e) {
+            // Ignore - field might not exist or be accessible
+        }
     }
 }
