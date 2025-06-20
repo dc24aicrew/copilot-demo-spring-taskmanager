@@ -28,7 +28,7 @@ import java.util.UUID;
  * REST controller for task management operations.
  */
 @RestController
-@RequestMapping("/api/tasks")
+@RequestMapping("/tasks")
 @Tag(name = "Tasks", description = "Task management operations")
 @SecurityRequirement(name = "bearerAuth")
 public class TaskController {

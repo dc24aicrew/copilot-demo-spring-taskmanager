@@ -76,7 +76,7 @@ class TaskControllerTest {
         when(taskService.createTask(any(CreateTaskRequest.class))).thenReturn(response);
 
         // When & Then
-        mockMvc.perform(post("/api/tasks")
+        mockMvc.perform(post("/tasks")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
@@ -97,7 +97,7 @@ class TaskControllerTest {
         // Missing required title and priority
 
         // When & Then
-        mockMvc.perform(post("/api/tasks")
+        mockMvc.perform(post("/tasks")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
@@ -117,7 +117,7 @@ class TaskControllerTest {
         when(taskService.getTaskById(eq(taskId))).thenReturn(response);
 
         // When & Then
-        mockMvc.perform(get("/api/tasks/{id}", taskId))
+        mockMvc.perform(get("/tasks/{id}", taskId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(taskId.toString()))
                 .andExpect(jsonPath("$.title").value("Test Task"))
@@ -145,7 +145,7 @@ class TaskControllerTest {
         when(taskService.getAllTasks(any())).thenReturn(taskPage);
 
         // When & Then
-        mockMvc.perform(get("/api/tasks")
+        mockMvc.perform(get("/tasks")
                 .param("page", "0")
                 .param("size", "10"))
                 .andExpect(status().isOk())
@@ -164,7 +164,7 @@ class TaskControllerTest {
         UUID taskId = UUID.randomUUID();
 
         // When & Then
-        mockMvc.perform(delete("/api/tasks/{id}", taskId)
+        mockMvc.perform(delete("/tasks/{id}", taskId)
                 .with(csrf()))
                 .andExpect(status().isNoContent());
 
@@ -179,7 +179,7 @@ class TaskControllerTest {
         request.setPriority(TaskPriority.HIGH);
 
         // When & Then
-        mockMvc.perform(post("/api/tasks")
+        mockMvc.perform(post("/tasks")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
@@ -200,7 +200,7 @@ class TaskControllerTest {
         when(taskService.getMyAssignedTasks(any())).thenReturn(taskPage);
 
         // When & Then
-        mockMvc.perform(get("/api/tasks/my/assigned"))
+        mockMvc.perform(get("/tasks/my/assigned"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].title").value("Assigned Task"));
 
@@ -221,7 +221,7 @@ class TaskControllerTest {
         when(taskService.getMyCreatedTasks(any())).thenReturn(taskPage);
 
         // When & Then
-        mockMvc.perform(get("/api/tasks/my/created"))
+        mockMvc.perform(get("/tasks/my/created"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].title").value("Created Task"));
 
