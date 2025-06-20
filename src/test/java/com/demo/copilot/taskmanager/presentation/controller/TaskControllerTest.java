@@ -10,13 +10,13 @@ import com.demo.copilot.taskmanager.domain.valueobject.TaskPriority;
 import com.demo.copilot.taskmanager.domain.valueobject.TaskStatus;
 import com.demo.copilot.taskmanager.infrastructure.repository.TaskRepository;
 import com.demo.copilot.taskmanager.infrastructure.security.JwtService;
+import com.demo.copilot.taskmanager.test.util.TestPage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -130,17 +130,34 @@ class TaskControllerTest {
     @WithMockUser(username = "550e8400-e29b-41d4-a716-446655440000", roles = "USER")
     void getAllTasks_ShouldReturnPageOfTasks() throws Exception {
         // Given
+        UUID userId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+        OffsetDateTime now = OffsetDateTime.now();
+        
         TaskSummaryResponse task1 = new TaskSummaryResponse();
         task1.setId(UUID.randomUUID());
         task1.setTitle("Task 1");
         task1.setStatus(TaskStatus.TODO);
+        task1.setPriority(TaskPriority.HIGH);
+        task1.setCategory(TaskCategory.DEVELOPMENT);
+        task1.setDueDate(now.plusDays(7));
+        task1.setAssignedTo(userId);
+        task1.setCreatedBy(userId);
+        task1.setCreatedAt(now);
+        task1.setUpdatedAt(now);
 
         TaskSummaryResponse task2 = new TaskSummaryResponse();
         task2.setId(UUID.randomUUID());
         task2.setTitle("Task 2");
         task2.setStatus(TaskStatus.IN_PROGRESS);
+        task2.setPriority(TaskPriority.MEDIUM);
+        task2.setCategory(TaskCategory.TESTING);
+        task2.setDueDate(now.plusDays(14));
+        task2.setAssignedTo(userId);
+        task2.setCreatedBy(userId);
+        task2.setCreatedAt(now);
+        task2.setUpdatedAt(now);
 
-        Page<TaskSummaryResponse> taskPage = new PageImpl<>(List.of(task1, task2));
+        Page<TaskSummaryResponse> taskPage = new TestPage<>(List.of(task1, task2));
 
         when(taskService.getAllTasks(any())).thenReturn(taskPage);
 
@@ -190,12 +207,22 @@ class TaskControllerTest {
     @WithMockUser(username = "550e8400-e29b-41d4-a716-446655440000", roles = "USER")
     void getMyAssignedTasks_ShouldReturnAssignedTasks() throws Exception {
         // Given
+        UUID userId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+        OffsetDateTime now = OffsetDateTime.now();
+        
         TaskSummaryResponse task = new TaskSummaryResponse();
         task.setId(UUID.randomUUID());
         task.setTitle("Assigned Task");
         task.setStatus(TaskStatus.TODO);
+        task.setPriority(TaskPriority.HIGH);
+        task.setCategory(TaskCategory.DEVELOPMENT);
+        task.setDueDate(now.plusDays(7));
+        task.setAssignedTo(userId);
+        task.setCreatedBy(userId);
+        task.setCreatedAt(now);
+        task.setUpdatedAt(now);
 
-        Page<TaskSummaryResponse> taskPage = new PageImpl<>(List.of(task));
+        Page<TaskSummaryResponse> taskPage = new TestPage<>(List.of(task));
 
         when(taskService.getMyAssignedTasks(any())).thenReturn(taskPage);
 
@@ -211,12 +238,22 @@ class TaskControllerTest {
     @WithMockUser(username = "550e8400-e29b-41d4-a716-446655440000", roles = "USER")
     void getMyCreatedTasks_ShouldReturnCreatedTasks() throws Exception {
         // Given
+        UUID userId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+        OffsetDateTime now = OffsetDateTime.now();
+        
         TaskSummaryResponse task = new TaskSummaryResponse();
         task.setId(UUID.randomUUID());
         task.setTitle("Created Task");
         task.setStatus(TaskStatus.TODO);
+        task.setPriority(TaskPriority.MEDIUM);
+        task.setCategory(TaskCategory.DEVELOPMENT);
+        task.setDueDate(now.plusDays(5));
+        task.setAssignedTo(userId);
+        task.setCreatedBy(userId);
+        task.setCreatedAt(now);
+        task.setUpdatedAt(now);
 
-        Page<TaskSummaryResponse> taskPage = new PageImpl<>(List.of(task));
+        Page<TaskSummaryResponse> taskPage = new TestPage<>(List.of(task));
 
         when(taskService.getMyCreatedTasks(any())).thenReturn(taskPage);
 
