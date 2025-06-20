@@ -60,9 +60,11 @@ public class TaskService {
                 .estimatedHours(request.getEstimatedHours())
                 .isArchived(false);
 
-        // Set assigned user if provided
+        // Set assigned user if provided, otherwise assign to creator
         if (request.getAssignedTo() != null) {
             taskBuilder.assignedTo(UserId.of(request.getAssignedTo()));
+        } else {
+            taskBuilder.assignedTo(currentUserId);
         }
 
         Task task = taskBuilder.build();
