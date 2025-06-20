@@ -14,12 +14,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * Spring Security configuration for the Task Manager application.
  * 
- * This configuration sets up basic authentication and password encoding.
- * JWT-based authentication will be added later.
+ * This configuration sets up JWT-based stateless authentication with:
+ * - JWT authentication filter for Bearer tokens
+ * - Stateless session management
+ * - Method-level security
+ * - Public endpoints for authentication and documentation
  */
 @Configuration
 @EnableWebSecurity
@@ -27,9 +31,16 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    public SecurityConfig(UserDetailsService userDetailsService) {
+    public SecurityConfig(
+            UserDetailsService userDetailsService,
+            JwtAuthenticationFilter jwtAuthenticationFilter,
+            JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
         this.userDetailsService = userDetailsService;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
 
     /**
@@ -58,18 +69,23 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }    /**
-     * Security filter chain configuration.
+     * Security filter chain configuration with JWT authentication.
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            // Disable CSRF for REST API
+            // Disable CSRF for REST API (stateless)
             .csrf(AbstractHttpConfigurer::disable)
             
-            // Session management - for now using sessions, will move to JWT later
+            // Session management - STATELESS for JWT
             .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-              // Authorization rules
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            
+            // JWT authentication entry point for handling unauthorized requests
+            .exceptionHandling(exceptions -> exceptions
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint))
+            
+            // Authorization rules
             .authorizeHttpRequests(auth -> auth
                 // Public endpoints (relative to context path /api)
                 .requestMatchers("/auth/**").permitAll()
@@ -86,7 +102,10 @@ public class SecurityConfig {
                 
                 // All other requests need authentication
                 .anyRequest().authenticated()
-            );
+            )
+            
+            // Add JWT authentication filter before username/password authentication
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         // For H2 console (development only)
         http.headers(headers -> headers.frameOptions().disable());

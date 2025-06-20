@@ -3,7 +3,7 @@ package com.demo.copilot.taskmanager.presentation.dto.response;
 import com.demo.copilot.taskmanager.application.dto.user.UserResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /**
  * Data Transfer Object for authentication responses.
@@ -15,12 +15,12 @@ public class AuthResponse {
     private UserResponse user;
     private String message;
     
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime timestamp;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    private OffsetDateTime timestamp;
 
     // Default constructor
     public AuthResponse() {
-        this.timestamp = LocalDateTime.now();
+        this.timestamp = OffsetDateTime.now();
     }
 
     // Constructor
@@ -28,7 +28,7 @@ public class AuthResponse {
         this.token = token;
         this.user = user;
         this.message = message;
-        this.timestamp = LocalDateTime.now();
+        this.timestamp = OffsetDateTime.now();
     }
 
     // Builder pattern
@@ -94,11 +94,11 @@ public class AuthResponse {
         this.message = message;
     }
 
-    public LocalDateTime getTimestamp() {
+    public OffsetDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
+    public void setTimestamp(OffsetDateTime timestamp) {
         this.timestamp = timestamp;
     }
 }

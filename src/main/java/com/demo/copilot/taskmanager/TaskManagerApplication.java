@@ -3,7 +3,6 @@ package com.demo.copilot.taskmanager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 /**
  * Main application class for Task Manager Demo.
@@ -12,7 +11,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
  * for GitHub Copilot showcases.
  */
 @SpringBootApplication
-@EnableJpaAuditing
 @EnableCaching
 public class TaskManagerApplication {
 

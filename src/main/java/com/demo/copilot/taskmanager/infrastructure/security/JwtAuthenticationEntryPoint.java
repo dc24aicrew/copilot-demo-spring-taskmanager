@@ -1,7 +1,7 @@
 package com.demo.copilot.taskmanager.infrastructure.security;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +41,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
         Map<String, Object> errorResponse = new HashMap<>();
-        errorResponse.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        errorResponse.put("timestamp", OffsetDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         errorResponse.put("status", HttpServletResponse.SC_UNAUTHORIZED);
         errorResponse.put("error", "Unauthorized");
         errorResponse.put("message", "Authentication required to access this resource");

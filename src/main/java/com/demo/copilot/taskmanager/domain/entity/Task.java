@@ -6,7 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 /**
@@ -55,10 +55,10 @@ public class Task {
     private UserId createdBy;
 
     @Column(name = "due_date")
-    private LocalDateTime dueDate;
+    private OffsetDateTime dueDate;
 
     @Column(name = "completed_at")
-    private LocalDateTime completedAt;
+    private OffsetDateTime completedAt;
 
     @Column(name = "estimated_hours")
     private Integer estimatedHours;
@@ -71,11 +71,11 @@ public class Task {
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
+    private OffsetDateTime updatedAt;
 
     @Version
     @Column(name = "version")
@@ -107,7 +107,7 @@ public class Task {
         if (this.status == TaskStatus.COMPLETED && newStatus != TaskStatus.COMPLETED) {
             this.completedAt = null;
         } else if (newStatus == TaskStatus.COMPLETED && this.status != TaskStatus.COMPLETED) {
-            this.completedAt = LocalDateTime.now();
+            this.completedAt = OffsetDateTime.now();
         }
         
         this.status = newStatus;
@@ -128,7 +128,7 @@ public class Task {
         this.description = description != null ? description.trim() : null;
     }
 
-    public void setDueDate(LocalDateTime dueDate) {
+    public void setDueDate(OffsetDateTime dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -152,7 +152,7 @@ public class Task {
     // Business queries
     public boolean isOverdue() {
         return dueDate != null && 
-               LocalDateTime.now().isAfter(dueDate) && 
+               OffsetDateTime.now().isAfter(dueDate) && 
                status != TaskStatus.COMPLETED;
     }
 
@@ -160,7 +160,7 @@ public class Task {
         if (dueDate == null || status == TaskStatus.COMPLETED) {
             return false;
         }
-        return LocalDateTime.now().plusHours(hoursThreshold).isAfter(dueDate);
+        return OffsetDateTime.now().plusHours(hoursThreshold).isAfter(dueDate);
     }
 
     public boolean isAssignedTo(UserId userId) {
@@ -192,13 +192,13 @@ public class Task {
     public TaskCategory getCategory() { return category; }
     public UserId getAssignedTo() { return assignedTo; }
     public UserId getCreatedBy() { return createdBy; }
-    public LocalDateTime getDueDate() { return dueDate; }
-    public LocalDateTime getCompletedAt() { return completedAt; }
+    public OffsetDateTime getDueDate() { return dueDate; }
+    public OffsetDateTime getCompletedAt() { return completedAt; }
     public Integer getEstimatedHours() { return estimatedHours; }
     public Integer getActualHours() { return actualHours; }
     public Boolean getIsArchived() { return isArchived; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public OffsetDateTime getCreatedAt() { return createdAt; }
+    public OffsetDateTime getUpdatedAt() { return updatedAt; }
     public Long getVersion() { return version; }
 
     @Override
@@ -236,7 +236,7 @@ public class Task {
         private TaskCategory category;
         private UserId assignedTo;
         private UserId createdBy;
-        private LocalDateTime dueDate;
+        private OffsetDateTime dueDate;
         private Integer estimatedHours;
         private Boolean isArchived = false;
 
@@ -280,7 +280,7 @@ public class Task {
             return this;
         }
 
-        public Builder dueDate(LocalDateTime dueDate) {
+        public Builder dueDate(OffsetDateTime dueDate) {
             this.dueDate = dueDate;
             return this;
         }
