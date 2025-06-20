@@ -14,13 +14,14 @@ import com.demo.copilot.taskmanager.domain.valueobject.Email;
 import com.demo.copilot.taskmanager.domain.valueobject.UserId;
 
 /**
- * Repository interface for User entity data access operations.
+ * Legacy repository interface for User entity data access operations.
  * 
- * Extends JpaRepository to provide CRUD operations and custom queries
- * for user management functionality.
+ * @deprecated This interface violates Clean Architecture principles.
+ * Use {@link com.demo.copilot.taskmanager.domain.repository.UserRepositoryContract} instead.
  */
+@Deprecated
 @Repository
-public interface UserRepository extends JpaRepository<User, UserId> {
+public interface UserRepositoryLegacy extends JpaRepository<User, UserId> {
 
     /**
      * Find a user by their email address.

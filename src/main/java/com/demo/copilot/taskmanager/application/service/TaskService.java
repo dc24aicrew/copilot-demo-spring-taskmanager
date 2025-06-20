@@ -10,7 +10,7 @@ import com.demo.copilot.taskmanager.domain.entity.Task;
 import com.demo.copilot.taskmanager.domain.valueobject.TaskId;
 import com.demo.copilot.taskmanager.domain.valueobject.TaskStatus;
 import com.demo.copilot.taskmanager.domain.valueobject.UserId;
-import com.demo.copilot.taskmanager.infrastructure.repository.TaskRepository;
+import com.demo.copilot.taskmanager.domain.repository.TaskRepositoryContract;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,10 +31,10 @@ import java.util.UUID;
 @Transactional
 public class TaskService {
 
-    private final TaskRepository taskRepository;
+    private final TaskRepositoryContract taskRepository;
     private final TaskMapper taskMapper;
 
-    public TaskService(TaskRepository taskRepository, TaskMapper taskMapper) {
+    public TaskService(TaskRepositoryContract taskRepository, TaskMapper taskMapper) {
         this.taskRepository = taskRepository;
         this.taskMapper = taskMapper;
     }

@@ -1,10 +1,6 @@
 package com.demo.copilot.taskmanager.domain.entity;
 
 import com.demo.copilot.taskmanager.domain.valueobject.*;
-import jakarta.persistence.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;
@@ -12,76 +8,30 @@ import java.util.Objects;
 /**
  * Task domain entity representing a work item in the system.
  * 
- * Encapsulates business logic and rules related to task management.
+ * Pure domain entity following Clean Architecture principles.
+ * Contains business logic and rules related to task management
+ * without any infrastructure dependencies.
  */
-@Entity
-@Table(name = "tasks", indexes = {
-    @Index(name = "idx_task_assigned_to", columnList = "assigned_to_id"),
-    @Index(name = "idx_task_created_by", columnList = "created_by_id"),
-    @Index(name = "idx_task_status", columnList = "status"),
-    @Index(name = "idx_task_priority", columnList = "priority"),
-    @Index(name = "idx_task_due_date", columnList = "due_date")
-})
-@EntityListeners(AuditingEntityListener.class)
 public class Task {
 
-    @EmbeddedId
     private TaskId id;
-
-    @Column(name = "title", nullable = false, length = 200)
     private String title;
-
-    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
     private TaskStatus status;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "priority", nullable = false)
     private TaskPriority priority;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "category")
     private TaskCategory category;
-
-    @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "assigned_to_id"))
     private UserId assignedTo;
-
-    @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "created_by_id"))
     private UserId createdBy;
-
-    @Column(name = "due_date")
     private OffsetDateTime dueDate;
-
-    @Column(name = "completed_at")
     private OffsetDateTime completedAt;
-
-    @Column(name = "estimated_hours")
     private Integer estimatedHours;
-
-    @Column(name = "actual_hours")
     private Integer actualHours;
-
-    @Column(name = "is_archived", nullable = false)
     private Boolean isArchived;
-
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
-
-    @Version
-    @Column(name = "version")
     private Long version;
 
-    // Default constructor for JPA
+    // Default constructor
     protected Task() {}
 
     private Task(Builder builder) {
@@ -96,6 +46,9 @@ public class Task {
         this.dueDate = builder.dueDate;
         this.estimatedHours = builder.estimatedHours;
         this.isArchived = builder.isArchived;
+        this.createdAt = OffsetDateTime.now();
+        this.updatedAt = OffsetDateTime.now();
+        this.version = 0L;
     }
 
     // Business methods
@@ -111,14 +64,17 @@ public class Task {
         }
         
         this.status = newStatus;
+        this.updatedAt = OffsetDateTime.now();
     }
 
     public void assignTo(UserId userId) {
         this.assignedTo = Objects.requireNonNull(userId, "Assigned user ID cannot be null");
+        this.updatedAt = OffsetDateTime.now();
     }
 
     public void updatePriority(TaskPriority newPriority) {
         this.priority = Objects.requireNonNull(newPriority, "Priority cannot be null");
+        this.updatedAt = OffsetDateTime.now();
     }
 
     public void updateDetails(String title, String description) {
@@ -126,23 +82,28 @@ public class Task {
             this.title = title.trim();
         }
         this.description = description != null ? description.trim() : null;
+        this.updatedAt = OffsetDateTime.now();
     }
 
     public void setDueDate(OffsetDateTime dueDate) {
         this.dueDate = dueDate;
+        this.updatedAt = OffsetDateTime.now();
     }
 
     public void updateTimeEstimate(Integer estimatedHours, Integer actualHours) {
         this.estimatedHours = estimatedHours != null && estimatedHours >= 0 ? estimatedHours : this.estimatedHours;
         this.actualHours = actualHours != null && actualHours >= 0 ? actualHours : this.actualHours;
+        this.updatedAt = OffsetDateTime.now();
     }
 
     public void archive() {
         this.isArchived = true;
+        this.updatedAt = OffsetDateTime.now();
     }
 
     public void unarchive() {
         this.isArchived = false;
+        this.updatedAt = OffsetDateTime.now();
     }
 
     public void complete() {

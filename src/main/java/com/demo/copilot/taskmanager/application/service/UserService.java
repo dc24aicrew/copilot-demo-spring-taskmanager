@@ -10,7 +10,7 @@ import com.demo.copilot.taskmanager.application.mapper.UserMapper;
 import com.demo.copilot.taskmanager.domain.entity.User;
 import com.demo.copilot.taskmanager.domain.valueobject.Email;
 import com.demo.copilot.taskmanager.domain.valueobject.UserId;
-import com.demo.copilot.taskmanager.infrastructure.repository.UserRepository;
+import com.demo.copilot.taskmanager.domain.repository.UserRepositoryContract;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,11 +28,11 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final UserRepositoryContract userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, 
+    public UserService(UserRepositoryContract userRepository, 
                       UserMapper userMapper, 
                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;

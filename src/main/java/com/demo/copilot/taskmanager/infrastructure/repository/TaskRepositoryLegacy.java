@@ -14,13 +14,14 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Repository interface for Task entity data access operations.
+ * Legacy repository interface for Task entity data access operations.
  * 
- * Extends JpaRepository to provide CRUD operations and custom queries
- * for task management functionality.
+ * @deprecated This interface violates Clean Architecture principles.
+ * Use {@link com.demo.copilot.taskmanager.domain.repository.TaskRepositoryContract} instead.
  */
+@Deprecated
 @Repository
-public interface TaskRepository extends JpaRepository<Task, TaskId> {
+public interface TaskRepositoryLegacy extends JpaRepository<Task, TaskId> {
 
     /**
      * Find tasks assigned to a specific user with pagination.
