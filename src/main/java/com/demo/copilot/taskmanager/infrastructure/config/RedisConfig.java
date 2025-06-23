@@ -1,5 +1,6 @@
 package com.demo.copilot.taskmanager.infrastructure.config;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,10 +10,10 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
  * Redis configuration for JWT blacklisting and caching.
- * Only activated when Redis host is configured.
+ * Only activated when Redis connection factory is available.
  */
 @Configuration
-@ConditionalOnProperty(value = "spring.data.redis.host")
+@ConditionalOnBean(RedisConnectionFactory.class)
 public class RedisConfig {
 
     /**
