@@ -2,7 +2,7 @@ package com.demo.copilot.taskmanager.infrastructure.security;
 
 import com.demo.copilot.taskmanager.domain.entity.User;
 import com.demo.copilot.taskmanager.domain.valueobject.Email;
-import com.demo.copilot.taskmanager.infrastructure.repository.UserRepository;
+import com.demo.copilot.taskmanager.domain.repository.UserRepositoryContract;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,9 +19,9 @@ import java.util.Collections;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserRepositoryContract userRepository;
 
-    public UserDetailsServiceImpl(UserRepository userRepository) {
+    public UserDetailsServiceImpl(UserRepositoryContract userRepository) {
         this.userRepository = userRepository;
     }
 

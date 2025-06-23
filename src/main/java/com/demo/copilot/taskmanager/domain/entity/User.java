@@ -3,10 +3,6 @@ package com.demo.copilot.taskmanager.domain.entity;
 import com.demo.copilot.taskmanager.domain.valueobject.Email;
 import com.demo.copilot.taskmanager.domain.valueobject.UserId;
 import com.demo.copilot.taskmanager.domain.valueobject.UserRole;
-import jakarta.persistence.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;
@@ -14,62 +10,27 @@ import java.util.Objects;
 /**
  * User domain entity representing a system user.
  * 
- * This entity follows Domain-Driven Design principles and encapsulates
- * business logic related to user management.
+ * Pure domain entity following Clean Architecture principles.
+ * Contains business logic related to user management
+ * without any infrastructure dependencies.
  */
-@Entity
-@Table(name = "users", indexes = {
-    @Index(name = "idx_user_email", columnList = "email", unique = true),
-    @Index(name = "idx_user_username", columnList = "username", unique = true)
-})
-@EntityListeners(AuditingEntityListener.class)
 public class User {
 
-    @EmbeddedId
     private UserId id;
-
-    @Column(name = "username", nullable = false, unique = true, length = 50)
     private String username;
-
-    @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "email"))
     private Email email;
-
-    @Column(name = "password_hash", nullable = false)
     private String passwordHash;
-
-    @Column(name = "first_name", nullable = false, length = 100)
     private String firstName;
-
-    @Column(name = "last_name", nullable = false, length = 100)
     private String lastName;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
     private UserRole role;
-
-    @Column(name = "is_active", nullable = false)
     private Boolean isActive;
-
-    @Column(name = "last_login_at")
     private OffsetDateTime lastLoginAt;
-
-    @Column(name = "avatar_url")
     private String avatarUrl;
-
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
-
-    @Version
-    @Column(name = "version")
     private Long version;
 
-    // Default constructor for JPA
+    // Default constructor
     protected User() {}
 
     private User(Builder builder) {
@@ -82,19 +43,25 @@ public class User {
         this.role = builder.role;
         this.isActive = builder.isActive;
         this.avatarUrl = builder.avatarUrl;
+        this.createdAt = OffsetDateTime.now();
+        this.updatedAt = OffsetDateTime.now();
+        this.version = 0L;
     }
 
     // Business methods
     public void activate() {
         this.isActive = true;
+        this.updatedAt = OffsetDateTime.now();
     }
 
     public void deactivate() {
         this.isActive = false;
+        this.updatedAt = OffsetDateTime.now();
     }
 
     public void updateLastLogin() {
         this.lastLoginAt = OffsetDateTime.now();
+        this.updatedAt = OffsetDateTime.now();
     }
 
     public void changePassword(String newPasswordHash) {
@@ -102,6 +69,7 @@ public class User {
             throw new IllegalArgumentException("Password hash cannot be null or empty");
         }
         this.passwordHash = newPasswordHash;
+        this.updatedAt = OffsetDateTime.now();
     }
 
     public void updateProfile(String firstName, String lastName, String avatarUrl) {
@@ -112,6 +80,7 @@ public class User {
             this.lastName = lastName.trim();
         }
         this.avatarUrl = avatarUrl;
+        this.updatedAt = OffsetDateTime.now();
     }
 
     public String getFullName() {
