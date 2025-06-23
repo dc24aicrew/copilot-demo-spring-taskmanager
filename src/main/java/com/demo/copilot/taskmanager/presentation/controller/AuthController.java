@@ -133,19 +133,20 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
             
-            String username = jwtSecurityService.extractUsername(refreshToken);
-            if (username == null) {
-                logger.warn("Could not extract username from refresh token");
+            // Extract email from token instead of username (since username is now user ID)
+            String email = jwtSecurityService.extractEmail(refreshToken);
+            if (email == null) {
+                logger.warn("Could not extract email from refresh token");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
             
-            UserResponse user = userService.getUserByEmail(username);
+            UserResponse user = userService.getUserByEmail(email);
             
-            // Generate new access token (refresh token rotation could be added here)
+            // Generate new access token using the actual user ID
             UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
-                .username(user.getEmail())
+                .username(user.getId().toString()) // Use user ID as username
                 .password("") // Not needed for token generation
-                .authorities(user.getRole().name())
+                .authorities("ROLE_" + user.getRole().name())
                 .build();
             
             String newAccessToken = jwtSecurityService.generateAccessToken(userDetails);
@@ -158,7 +159,7 @@ public class AuthController {
                 .message("Token refreshed successfully")
                 .build();
             
-            logger.debug("Token refreshed successfully for user: {}", username);
+            logger.debug("Token refreshed successfully for user: {}", email);
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {
@@ -194,10 +195,11 @@ public class AuthController {
         try {
             String token = extractTokenFromHeader(authHeader);
             if (token != null) {
-                String username = jwtSecurityService.extractUsername(token);
-                if (username != null) {
-                    jwtSecurityService.blacklistAllUserTokens(username);
-                    logger.info("All tokens blacklisted for user: {}", username);
+                // Extract email from token for user identification
+                String email = jwtSecurityService.extractEmail(token);
+                if (email != null) {
+                    jwtSecurityService.blacklistAllUserTokens(email);
+                    logger.info("All tokens blacklisted for user: {}", email);
                 }
             }
             return ResponseEntity.ok().build();

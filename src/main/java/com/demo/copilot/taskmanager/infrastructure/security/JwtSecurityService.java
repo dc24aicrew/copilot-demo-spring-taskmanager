@@ -70,8 +70,14 @@ public class JwtSecurityService {
             Instant now = Instant.now();
             Instant expiration = now.plus(parseDuration(accessTokenExpiration), ChronoUnit.SECONDS);
             
-            JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                    .subject(userDetails.getUsername())
+            // Extract email from CustomUserPrincipal if available
+            String email = null;
+            if (userDetails instanceof com.demo.copilot.taskmanager.infrastructure.security.UserDetailsServiceImpl.CustomUserPrincipal) {
+                email = ((com.demo.copilot.taskmanager.infrastructure.security.UserDetailsServiceImpl.CustomUserPrincipal) userDetails).getEmail();
+            }
+            
+            JWTClaimsSet.Builder claimsBuilder = new JWTClaimsSet.Builder()
+                    .subject(userDetails.getUsername()) // Now contains user ID
                     .issuer(issuer)
                     .audience(audience)
                     .issueTime(Date.from(now))
@@ -81,8 +87,14 @@ public class JwtSecurityService {
                     .claim("type", "access")
                     .claim("authorities", userDetails.getAuthorities().stream()
                             .map(GrantedAuthority::getAuthority)
-                            .collect(Collectors.toList()))
-                    .build();
+                            .collect(Collectors.toList()));
+            
+            // Add email as a separate claim if available
+            if (email != null) {
+                claimsBuilder.claim("email", email);
+            }
+            
+            JWTClaimsSet claimsSet = claimsBuilder.build();
             
             return signToken(claimsSet);
         } catch (Exception e) {
@@ -102,16 +114,28 @@ public class JwtSecurityService {
             Instant now = Instant.now();
             Instant expiration = now.plus(parseDuration(refreshTokenExpiration), ChronoUnit.SECONDS);
             
-            JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                    .subject(userDetails.getUsername())
+            // Extract email from CustomUserPrincipal if available
+            String email = null;
+            if (userDetails instanceof com.demo.copilot.taskmanager.infrastructure.security.UserDetailsServiceImpl.CustomUserPrincipal) {
+                email = ((com.demo.copilot.taskmanager.infrastructure.security.UserDetailsServiceImpl.CustomUserPrincipal) userDetails).getEmail();
+            }
+            
+            JWTClaimsSet.Builder claimsBuilder = new JWTClaimsSet.Builder()
+                    .subject(userDetails.getUsername()) // Now contains user ID
                     .issuer(issuer)
                     .audience(audience)
                     .issueTime(Date.from(now))
                     .expirationTime(Date.from(expiration))
                     .notBeforeTime(Date.from(now))
                     .jwtID(UUID.randomUUID().toString())
-                    .claim("type", "refresh")
-                    .build();
+                    .claim("type", "refresh");
+            
+            // Add email as a separate claim if available
+            if (email != null) {
+                claimsBuilder.claim("email", email);
+            }
+            
+            JWTClaimsSet claimsSet = claimsBuilder.build();
             
             return signToken(claimsSet);
         } catch (Exception e) {
@@ -167,6 +191,23 @@ public class JwtSecurityService {
             return signedJWT.getJWTClaimsSet().getSubject();
         } catch (Exception e) {
             logger.debug("Failed to extract username from token: {}", e.getMessage());
+            return null;
+        }
+    }
+    
+    /**
+     * Extracts email from a JWT token.
+     * 
+     * @param token JWT token
+     * @return Email from token or null if not found
+     */
+    public String extractEmail(String token) {
+        try {
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            JWTClaimsSet claims = signedJWT.getJWTClaimsSet();
+            return claims.getStringClaim("email");
+        } catch (Exception e) {
+            logger.debug("Failed to extract email from token: {}", e.getMessage());
             return null;
         }
     }
