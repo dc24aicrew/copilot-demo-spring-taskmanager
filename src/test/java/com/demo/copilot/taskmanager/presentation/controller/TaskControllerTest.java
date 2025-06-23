@@ -10,6 +10,9 @@ import com.demo.copilot.taskmanager.domain.valueobject.TaskPriority;
 import com.demo.copilot.taskmanager.domain.valueobject.TaskStatus;
 import com.demo.copilot.taskmanager.domain.repository.TaskRepositoryContract;
 import com.demo.copilot.taskmanager.infrastructure.security.JwtService;
+import com.demo.copilot.taskmanager.infrastructure.security.JwtSecurityService;
+import com.demo.copilot.taskmanager.infrastructure.security.KeyManagementService;
+import com.demo.copilot.taskmanager.infrastructure.security.BlacklistService;
 import com.demo.copilot.taskmanager.test.util.TestPage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -44,6 +47,15 @@ class TaskControllerTest {
 
     @MockBean
     private JwtService jwtService;
+
+    @MockBean
+    private JwtSecurityService jwtSecurityService;
+
+    @MockBean
+    private KeyManagementService keyManagementService;
+
+    @MockBean
+    private BlacklistService blacklistService;
 
     @MockBean 
     private TaskRepositoryContract taskRepository;

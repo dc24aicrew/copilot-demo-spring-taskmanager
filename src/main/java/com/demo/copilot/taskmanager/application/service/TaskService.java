@@ -11,6 +11,8 @@ import com.demo.copilot.taskmanager.domain.valueobject.TaskId;
 import com.demo.copilot.taskmanager.domain.valueobject.TaskStatus;
 import com.demo.copilot.taskmanager.domain.valueobject.UserId;
 import com.demo.copilot.taskmanager.domain.repository.TaskRepositoryContract;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,6 +32,8 @@ import java.util.UUID;
 @Service
 @Transactional
 public class TaskService {
+
+    private static final Logger logger = LoggerFactory.getLogger(TaskService.class);
 
     private final TaskRepositoryContract taskRepository;
     private final TaskMapper taskMapper;
@@ -232,13 +236,15 @@ public class TaskService {
     private UserId getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        // For demo purposes, we'll use username as UUID (this would normally be mapped through UserService)
-        // In a real application, we'd have a proper user context service
+        
+        // Since we updated the JWT to use user ID as subject, username should now be the user ID
         try {
             return UserId.of(UUID.fromString(username));
         } catch (IllegalArgumentException e) {
-            // Fallback: generate a UUID from username for demo
-            return UserId.of(UUID.nameUUIDFromBytes(username.getBytes()));
+            // If the username is not a valid UUID, it might be an email (legacy token)
+            // In this case, we need to look up the user by email to get the ID
+            logger.warn("Username '{}' is not a valid UUID, attempting to look up user by email", username);
+            throw new RuntimeException("Cannot extract user ID from authentication context. Username is not a valid UUID: " + username);
         }
     }
 

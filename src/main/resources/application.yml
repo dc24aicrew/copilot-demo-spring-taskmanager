@@ -37,8 +37,23 @@ spring:
   security:
     jwt:
       secret: ${JWT_SECRET:demo-secret-key-change-in-production-minimum-32-characters}
-      expiration: ${JWT_EXPIRATION:86400000} # 24 hours in milliseconds
+      expiration: ${JWT_EXPIRATION:86400000} # 24 hours in milliseconds (legacy)
       refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000} # 7 days
+      # Enhanced JWT Security Configuration
+      security:
+        algorithm: "RS256"
+        access-token:
+          expiration: 900s # 15 minutes
+        refresh-token:
+          expiration: 604800s # 7 days
+        key-rotation:
+          schedule: "0 0 1 * *" # Monthly
+        issuer: "task-manager-api"
+        audience: "task-manager-clients"
+      blacklist:
+        redis:
+          key-prefix: "jwt:blacklist:"
+          cleanup-interval: 3600s
 
   cache:
     type: simple
@@ -46,6 +61,19 @@ spring:
       - users
       - tasks
       - projects
+
+  # Redis Configuration
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 2000ms
+      jedis:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
 
 server:
   port: ${SERVER_PORT:8080}
@@ -172,6 +200,11 @@ spring:
     
   flyway:
     enabled: false
+
+  # Disable Redis for tests to use in-memory blacklist
+  data:
+    redis:
+      host: 
 
 logging:
   level:

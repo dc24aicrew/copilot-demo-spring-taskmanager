@@ -69,6 +69,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         @Override
         public String getUsername() {
+            // Return user ID instead of email for JWT subject
+            // This ensures the JWT subject is the user ID, not the email
+            return user.getId().getValue().toString();
+        }
+        
+        /**
+         * Get the user's email address.
+         * Since getUsername() now returns the user ID, this method provides access to the email.
+         */
+        public String getEmail() {
             return user.getEmail().getValue();
         }
 
