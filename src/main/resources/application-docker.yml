@@ -3,6 +3,14 @@ spring:
     url: jdbc:postgresql://postgres:5432/taskmanager_demo
     username: ${POSTGRES_USER:taskmanager}
     password: ${POSTGRES_PASSWORD:taskmanager}
+  
+  # Redis Configuration for Docker Environment
+  data:
+    redis:
+      host: redis  # Use Docker Compose service name
+      port: 6379
+      password: ${REDIS_PASSWORD:}
+      timeout: 2000ms
 
 logging:
   level:

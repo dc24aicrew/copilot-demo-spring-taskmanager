@@ -47,6 +47,8 @@ services:
       SPRING_PROFILES_ACTIVE: docker
       DB_USERNAME: taskmanager
       DB_PASSWORD: taskmanager
+      REDIS_HOST: redis          # Add this
+      REDIS_PORT: 6379           # Add this
       JWT_SECRET: demo-secret-key-for-development-minimum-32-characters-long
     depends_on:
       postgres:
