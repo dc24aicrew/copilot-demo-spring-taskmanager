@@ -1,6 +1,6 @@
 package com.demo.copilot.taskmanager.infrastructure.repository;
 
-import com.demo.copilot.taskmanager.domain.entity.Task;
+import com.demo.copilot.taskmanager.infrastructure.persistence.entity.TaskJpaEntity;
 import com.demo.copilot.taskmanager.domain.valueobject.TaskId;
 import com.demo.copilot.taskmanager.domain.valueobject.TaskStatus;
 import com.demo.copilot.taskmanager.domain.valueobject.UserId;
@@ -21,58 +21,58 @@ import java.util.List;
  */
 @Deprecated
 @Repository
-public interface TaskRepositoryLegacy extends JpaRepository<Task, TaskId> {
+public interface TaskRepositoryLegacy extends JpaRepository<TaskJpaEntity, TaskId> {
 
     /**
      * Find tasks assigned to a specific user with pagination.
      */
-    Page<Task> findByAssignedTo(UserId assignedTo, Pageable pageable);
+    Page<TaskJpaEntity> findByAssignedTo(UserId assignedTo, Pageable pageable);
 
     /**
      * Find tasks by status.
      */
-    List<Task> findByStatus(TaskStatus status);
+    List<TaskJpaEntity> findByStatus(TaskStatus status);
 
     /**
      * Find tasks created by a specific user with pagination.
      */
-    Page<Task> findByCreatedBy(UserId createdBy, Pageable pageable);
+    Page<TaskJpaEntity> findByCreatedBy(UserId createdBy, Pageable pageable);
 
     /**
      * Find tasks by status with pagination.
      */
-    Page<Task> findByStatus(TaskStatus status, Pageable pageable);
+    Page<TaskJpaEntity> findByStatus(TaskStatus status, Pageable pageable);
 
     /**
      * Find all non-archived tasks with pagination.
      */
-    Page<Task> findByIsArchivedFalse(Pageable pageable);
+    Page<TaskJpaEntity> findByIsArchivedFalse(Pageable pageable);
 
     /**
      * Find tasks assigned to user or created by user with pagination.
      */
-    @Query("SELECT t FROM Task t WHERE (t.assignedTo = :userId OR t.createdBy = :userId) AND t.isArchived = false")
-    Page<Task> findTasksAccessibleByUser(@Param("userId") UserId userId, Pageable pageable);
+    @Query("SELECT t FROM TaskJpaEntity t WHERE (t.assignedTo = :userId OR t.createdBy = :userId) AND t.isArchived = false")
+    Page<TaskJpaEntity> findTasksAccessibleByUser(@Param("userId") UserId userId, Pageable pageable);
 
     /**
      * Find tasks by assigned user and status.
      */
-    Page<Task> findByAssignedToAndStatus(UserId assignedTo, TaskStatus status, Pageable pageable);
+    Page<TaskJpaEntity> findByAssignedToAndStatus(UserId assignedTo, TaskStatus status, Pageable pageable);
 
     /**
      * Find tasks by created user and status.
      */
-    Page<Task> findByCreatedByAndStatus(UserId createdBy, TaskStatus status, Pageable pageable);
+    Page<TaskJpaEntity> findByCreatedByAndStatus(UserId createdBy, TaskStatus status, Pageable pageable);
 
     /**
      * Count tasks by status.
      */
-    @Query("SELECT COUNT(t) FROM Task t WHERE t.status = :status AND t.isArchived = false")
+    @Query("SELECT COUNT(t) FROM TaskJpaEntity t WHERE t.status = :status AND t.isArchived = false")
     long countByStatus(@Param("status") TaskStatus status);
 
     /**
      * Count tasks assigned to a user.
      */
-    @Query("SELECT COUNT(t) FROM Task t WHERE t.assignedTo = :userId AND t.isArchived = false")
+    @Query("SELECT COUNT(t) FROM TaskJpaEntity t WHERE t.assignedTo = :userId AND t.isArchived = false")
     long countByAssignedTo(@Param("userId") UserId userId);
 }
